@@ -18,16 +18,14 @@
 package com.example.android.devbyteviewer.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android.devbyteviewer.database.VideosDatabase
 import com.example.android.devbyteviewer.repository.VideosRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * DevByteViewModel designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -57,11 +55,31 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
      */
     init {
         viewModelScope.launch {
+            //testThread()
+            //https://stackoverflow.com/questions/64060268/when-to-use-withcontext
+            //withContext() is a suspending operation and the coroutine will suspend till it's completion and then proceed ahead.
+            withContext(Dispatchers.IO) {
+                delay(6000)
+                Log.d("ViewModel", "withContext thread: ${Thread.currentThread().name}")
+            }
             videosRepository.refreshVideos()
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                delay(3000)
+                Log.d("ViewModel", "withContext threadTEST: ${Thread.currentThread().name}")
+            }
         }
     }
 
+    suspend fun testThread()
+    {
+        delay(3000)
+        Log.i("ViewModel","testThread")
+    }
+
     val playlist = videosRepository.videos
+
 
     /**
      */

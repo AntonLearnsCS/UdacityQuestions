@@ -32,9 +32,11 @@ import retrofit2.http.GET
 /**
  * A retrofit service to fetch a devbyte playlist.
  */
+//TODO: Why can't I change the fun getPlaylist() to " suspend fun getPlaylist(): NetworkVideoContainer"
+//TODO: and thereby remove the "await()" function on the playlist variable within "refreshVideos()" ?
 interface DevbyteService {
     @GET("devbytes.json")
-    suspend fun getPlaylist(): NetworkVideoContainer
+    fun getPlaylist(): Deferred<NetworkVideoContainer>
 }
 
 /**

@@ -49,7 +49,8 @@ class VideosRepository(private val database: VideosDatabase) {
      */
     suspend fun refreshVideos() {
         withContext(Dispatchers.IO) {
-            val playlist = Network.devbytes.getPlaylist()
+            //Q: Why do we need to call await() if we are running the retrieval from a background thread?
+            val playlist = Network.devbytes.getPlaylist().await()
             database.videoDao.insertAll(*playlist.asDatabaseModel())
         }
     }
