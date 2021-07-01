@@ -33,17 +33,23 @@ interface VideoDao {
 @Database(entities = [DatabaseVideo::class], version = 1)
 abstract class VideosDatabase : RoomDatabase() {
     abstract val videoDao: VideoDao
-}
 
-private lateinit var INSTANCE: VideosDatabase
+companion object {
+    private var INSTANCE: VideosDatabase? = null
 
-fun getDatabase(context: Context): VideosDatabase {
-    synchronized(VideosDatabase::class.java) {
-        if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    VideosDatabase::class.java,
-                    "videos").build()
+    fun getDatabase(context: Context): VideosDatabase {
+        synchronized(VideosDatabase::class.java) {
+            var instance = INSTANCE
+            if (instance == null) {
+                instance = Room.databaseBuilder(context.applicationContext,
+                        VideosDatabase::class.java,
+                        "videos")
+                        .fallbackToDestructiveMigration()
+                        .build()
+                INSTANCE = instance
+            }
+            return instance
         }
     }
-    return INSTANCE
+}
 }

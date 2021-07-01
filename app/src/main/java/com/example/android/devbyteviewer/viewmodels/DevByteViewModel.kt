@@ -22,7 +22,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.android.devbyteviewer.database.getDatabase
+import com.example.android.devbyteviewer.database.VideosDatabase
 import com.example.android.devbyteviewer.repository.VideosRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
      *
      */
 
-    private val database = getDatabase(application)
+    private val database = VideosDatabase.getDatabase(application)
     private val videosRepository = VideosRepository(database)
 
     /**

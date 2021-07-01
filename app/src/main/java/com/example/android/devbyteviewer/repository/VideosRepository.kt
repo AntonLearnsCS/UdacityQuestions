@@ -33,6 +33,7 @@ class VideosRepository(private val database: VideosDatabase) {
      * A playlist of videos that can be shown on the screen.
      */
     val videos: LiveData<List<Video>> =
+            //converts a List of DatabaseVideo into a List of Video to respect the seperation of concern
             Transformations.map(database.videoDao.getVideos()) {
         it.asDomainModel()
     }
@@ -48,7 +49,7 @@ class VideosRepository(private val database: VideosDatabase) {
      */
     suspend fun refreshVideos() {
         withContext(Dispatchers.IO) {
-            val playlist = Network.devbytes.getPlaylist().await()
+            val playlist = Network.devbytes.getPlaylist()
             database.videoDao.insertAll(*playlist.asDatabaseModel())
         }
     }
