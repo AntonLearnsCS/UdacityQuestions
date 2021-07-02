@@ -36,7 +36,8 @@ import retrofit2.http.GET
 //TODO: and thereby remove the "await()" function on the playlist variable within "refreshVideos()" ?
 interface DevbyteService {
     @GET("devbytes.json")
-    fun getPlaylist(): Deferred<NetworkVideoContainer>
+    suspend fun getPlaylist(): NetworkVideoContainer
+    //originally: " fun getPlaylist(): Deferred<NetworkVideoContainer>"
 }
 
 /**
